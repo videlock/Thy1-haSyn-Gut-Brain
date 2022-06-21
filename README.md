@@ -47,3 +47,4 @@ Code to accompany "Distinct patterns of gene expression changes in the colon and
     6. [RiskGenes.R](2-Analysis/WGCNA/RiskGenes.R)
 4. GSEA - [GSEA-commandSetup.R](2-Analysis/GSEA-commandSetup.R) (writes commands for GSEA command line)
 5. Validation
+6. FinalProcessedData is a list containng processed corrected data and metadata 
