@@ -1,5 +1,4 @@
 # Thy1-haSyn-Gut-Brain
-=======
 
 Code to accompany "Distinct patterns of gene expression changes in the colon and striatum of young mice overexpressing alpha-synuclein support Parkinson Disease as a multi-system process"
 
