@@ -45,5 +45,5 @@ Code to accompany "Distinct patterns of gene expression changes in the colon and
     4. [CytoscapeExport.R](2-Analysis/WGCNA/CytoscapeExport.R)
     5. [ModulePreservation.R](2-Analysis/WGCNA/ModulePreservation.R)
     6. [RiskGenes.R](2-Analysis/WGCNA/RiskGenes.R)
-4. GSEA
+4. GSEA - [GSEA-commandSetup.R](2-Analysis/GSEA-commandSetup.R) (writes commands for GSEA command line)
 5. Validation
