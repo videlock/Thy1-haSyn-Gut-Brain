@@ -9,14 +9,15 @@ library(gridExtra)
 setwd(dirname(rstudioapi::callFun("getActiveDocumentContext")$path))
 
 
-datlist<-readRDS("FinalProcessedData.rds")
-an<-fData(readRDS("../1-RNAseqWorkflow/C_QCandNormalization/data/rawCountEset.rds"))
+datlist<-readRDS("data/FinalProcessedData.rds")
+an<-fData(readRDS("data/rawCountEset.rds"))
+
 hasEGID<-rownames(an[!is.na(an$NCBI.gene.ID),])
 
-grplist<-list(dc1m="Colon, 1 month",
-              dc3m="Colon, 3 months",
-              str1m="Striatum, 1 month",
-              str3m="Striatum, 3 months"
+grplist<-list(dc1m="Gut, 1 month",
+              dc3m="Gut, 3 months",
+              str1m="Brain, 1 month",
+              str3m="Brain, 3 months"
 )
 
 # re-order samples by clustering within group
@@ -24,6 +25,7 @@ ReorderSamps<-function(datexpr,target){
   getInd<-function(subgrp){
     data1<-t(datexpr[,names(datexpr)%in%rownames(target[target$GT==subgrp,])])
     dend<-as.dendrogram(hclust(dist(data1)))
+    # dend <- reorder(dend, rowMeans(data1))
     Ind<-rev(order.dendrogram(dend))
     return(Ind)
   }
@@ -35,8 +37,16 @@ ReorderSamps<-function(datexpr,target){
 }
 
 
+
+
+fontsize_row=6
+fontsize_col=6
+fontsize=7
+
+
 ann_colors = list(
   Genotype = c("Thy1-haSyn"="firebrick", WT="white"))
+
 
 hmlist<-list()
 
@@ -47,14 +57,15 @@ for(grp in names(grplist)){
   tt<-datlist[[grp]]$tt[rownames(datlist[[grp]]$tt)%in%hasEGID,]
   hmlist[[grp]]<-pheatmap(mat = datexpr[rownames(tt)[1:50],],scale = "row",
                           cluster_cols = F,
-                          annotation_col = data.frame(Genotype=target$GT, row.names = rownames(target)),
+                          annotation_col = data.frame(Genotype=target$GT, 
+                                                      row.names = rownames(target) ),
                           annotation_colors = ann_colors,
                           annotation_legend = F,
                           show_colnames = F,
                           labels_row = as.character(tt$Gene.name[1:50]),
                           breaks = seq(-2, 2, length.out = 101),
                           treeheight_row = 10,silent = F,
-                          fontsize_row = 10,fontsize_col = 9,fontsize = 9,
+                          fontsize_row = fontsize_row,fontsize_col = fontsize_col,fontsize = fontsize,
                           main = grplist[[grp]],legend = F)
 }
 
@@ -74,16 +85,17 @@ for(grp in names(grplist)){
   target$GT<-gsub("Hem","Thy1-haSyn",target$GT)
   tt<-datlist[[grp]]$tt[rownames(datlist[[grp]]$tt)%in%hasEGID,]
   hmlist2[[grp]]<-pheatmap(mat = datexpr[rownames(tt)[1:50],],scale = "row",
-                          cluster_cols = F,clustering_callback = callback,
-                          annotation_col = data.frame(Genotype=target$GT, row.names = rownames(target)),
-                          annotation_colors = ann_colors,
-                          annotation_legend = F,
-                          show_colnames = F,
-                          labels_row = as.character(tt$Gene.name[1:50]),
-                          breaks = seq(-2, 2, length.out = 101),
-                          treeheight_row = 10,silent = F,
-                          fontsize_row = 8,fontsize_col = 8,fontsize = 7,
-                          main = grplist[[grp]],legend = F)
+                           cluster_cols = F,clustering_callback = callback,
+                           annotation_col = data.frame(Genotype=target$GT, 
+                                                       row.names = rownames(target) ),
+                           annotation_colors = ann_colors,
+                           annotation_legend = F,
+                           show_colnames = F,
+                           labels_row = as.character(tt$Gene.name[1:50]),
+                           breaks = seq(-2, 2, length.out = 101),
+                           treeheight_row = 10,silent = F,
+                           fontsize_row = fontsize_row,fontsize_col = fontsize_col,fontsize = fontsize,
+                           main = grplist[[grp]],legend = F)
 }
 
 
@@ -100,7 +112,7 @@ AnnotLegendPlot<-pheatmap(mat = datexpr[rownames(tt)[1:50],],scale = "row",
                           labels_row = as.character(tt$Gene.name[1:50]),
                           breaks = seq(-2, 2, length.out = 101),
                           treeheight_row = 10,silent = F,
-                          fontsize_row = 9,fontsize_col = 9,
+                          fontsize_row = fontsize_row,fontsize_col = fontsize_col,fontsize = fontsize,
                           main = grplist[[grp]],
                           legend = F)
 
@@ -114,28 +126,32 @@ MatLegendPlot<-pheatmap(mat = datexpr[rownames(tt)[1:50],],scale = "row",
                         labels_row = as.character(tt$Gene.name[1:50]),
                         breaks = seq(-2, 2, length.out = 101),
                         treeheight_row = 10,silent = F,
-                        width = 2,height = 4,fontsize_row = 4,fontsize_col = 4,
+                        width = 2,height = 4,fontsize_row = fontsize_row,fontsize_col = fontsize_col,fontsize = fontsize,
                         main = grplist[[grp]],legend = T)
 
 
 
 
 gl2=list(hmlist2$dc1m[[4]],hmlist2$dc3m[[4]],
-        hmlist2$str1m[[4]],hmlist2$str3m[[4]],
-        MatLegendPlot$gtable$grobs[[6]],
-        AnnotLegendPlot$gtable$grobs[[7]])
+         hmlist2$str1m[[4]],hmlist2$str3m[[4]],
+         MatLegendPlot$gtable$grobs[[6]],
+         AnnotLegendPlot$gtable$grobs[[7]])
 
 
+a.ratio=10/6.5
 
-pdf("GeneExpressionHeatmaps.pdf",height = 6.5*.9,width = 10*.9)
+w=6.5
+h=w/a.ratio
+
+pdf("expressionHeatmap.pdf",height = h,width = w)
 grid.arrange(
   grobs = gl2,
   widths = c(3, 3, 3, 3,1.6),
-  heights=c(0.1,4,0.1,0.1,4),
+  heights=c(0.1,2,0.1,1,1),
   layout_matrix = rbind(c(1, 2, 3, 4, NA),
                         c(1, 2, 3, 4, 6),
                         c(1, 2, 3, 4, NA),
-                        c(1, 2, 3, 4, NA),
-                        c(1, 2, 3, 4, 5))
+                        c(1, 2, 3, 4, 5),
+                        c(1, 2, 3, 4, NA))
 )
 dev.off()
