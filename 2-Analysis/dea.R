@@ -1,6 +1,12 @@
-# setup ---------
+
+# example for colon (one month) shown. Uses processed data from step 1
+# resulting top tables are in FinalProcessedData
+
 library(Biobase)
 library(limma)
+
+
+setwd(dirname(rstudioapi::callFun("getActiveDocumentContext")$path))
 
 grp="dc1m"
 
