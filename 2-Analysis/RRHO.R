@@ -1,10 +1,54 @@
 
 library(RRHO2)
+library(limma)
+
+setwd(dirname(rstudioapi::callFun("getActiveDocumentContext")$path))
 
 outDir="rrhoFigs"
 dir.create(outDir,showWarnings = F)
 
-load("TopTables.rda")
+
+datlist<-readRDS("data/FinalProcessedData.rds")
+
+datexpr.list<-list(Colon=datlist$dcAll$dat.expr,
+                   Striatum=datlist$strAll$dat.expr)
+
+f.list<-list(Colon=factor(datlist$dcAll$target$GTtime),
+             Striatum=factor(datlist$strAll$target$GTtime))
+
+an.list<-list(Colon=fData(readRDS("data/rawCountEset.rds"))[rownames(datexpr.list$Colon),],
+              Striatum=fData(readRDS("data/rawCountEset.rds"))[rownames(datexpr.list$Striatum),]
+)
+
+tts<-list()
+
+for(tis in c("Colon","Striatum")){
+  GTtime<-f.list[[tis]]
+  datexpr<-datexpr.list[[tis]]
+  an<-an.list[[tis]]
+  design<-model.matrix(~0+GTtime)
+  colnames(design)<-levels(GTtime)
+  contrasts<-makeContrasts(Hem_1 - WT_1, Hem_3 - WT_3,
+                           Hem_3 - Hem_1, WT_3 - WT_1,
+                           levels=design)
+  fit <- lmFit(datexpr, design)
+  fit$genes<-an[rownames(datexpr),c("Gene.name","Gene.description")]
+  fit.cont<-contrasts.fit(fit, contrasts)
+  fit.cont<-eBayes(fit.cont)
+  tts[[paste0(tis,".GT.1m")]]<-topTable(fit.cont,coef = "Hem_1 - WT_1",
+                                        adjust.method = "BH",number = "inf")
+  tts[[paste0(tis,".GT.3m")]]<-topTable(fit.cont,coef = "Hem_3 - WT_3",
+                                        adjust.method = "BH",number = "inf")
+  tts[[paste0(tis,".Time.ASO")]]<-topTable(fit.cont,coef = "Hem_3 - Hem_1",
+                                           adjust.method = "BH",number = "inf")
+  tts[[paste0(tis,".Time.WT")]]<-topTable(fit.cont,coef = "WT_3 - WT_1",
+                                          adjust.method = "BH",number = "inf")
+  
+}
+
+# save(tts,file = "TopTables.rda")
+# 
+# load("TopTables.rda")
 
 
 inputList<-lapply(tts, function(x){
@@ -13,7 +57,7 @@ inputList<-lapply(tts, function(x){
            )
 })
 
-rm(tts)
+# rm(tts)
 
 # rrho - no adjustment --------------------
 method = "hyper"
@@ -549,13 +593,6 @@ file.name = "ColonVsStriatumGT.pdf"
 rrho2Plot(obj1, obj2, dir.text,plot.title,file.name,
           outDir,raster = F)
 
-# file.name = "ColonVsStriatumGTraster.pdf"
-# rrho2Plot(obj1, obj2, dir.text,plot.title,file.name,
-#           outDir,raster = T)
-# 
-# file.name = "ColonVsStriatumGT.png"
-# rrho2Plot(obj1, obj2, dir.text,plot.title,file.name,
-#           outDir,raster = F)
 
 obj1 = rrhoList.BY$GT.1m.CvS
 obj2 = rrhoList.BY$GT.3m.CvS
@@ -564,13 +601,7 @@ file.name = "ColonVsStriatumGTBY.pdf"
 rrho2Plot(obj1, obj2, dir.text,plot.title,file.name,
           outDir,raster = F)
 
-# file.name = "ColonVsStriatumGTBYraster.pdf"
-# rrho2Plot(obj1, obj2, dir.text,plot.title,file.name,
-#           outDir,raster = T)
-# 
-# file.name = "ColonVsStriatumGTBY.png"
-# rrho2Plot(obj1, obj2, dir.text,plot.title,file.name,
-#           outDir,raster = F)
+
 
 
 # aso v wt in 1m v 3m---------------
@@ -584,13 +615,7 @@ file.name = "T1mVsT3mGT.pdf"
 rrho2Plot(obj1, obj2, dir.text,plot.title,file.name,
           outDir,raster = F)
 
-# file.name = "T1mVsT3mGTraster.pdf"
-# rrho2Plot(obj1, obj2, dir.text,plot.title,file.name,
-#           outDir,raster = T)
-# 
-# file.name = "T1mVsT3mGT.png"
-# rrho2Plot(obj1, obj2, dir.text,plot.title,file.name,
-#           outDir,raster = F)
+
 
 obj1 = rrhoList.BY$GT.C.3mv1m
 obj2 = rrhoList.BY$GT.S.3mv1m
@@ -599,13 +624,7 @@ file.name = "T1mVsT3mGTBY.pdf"
 rrho2Plot(obj1, obj2, dir.text,plot.title,file.name,
           outDir,raster = F)
 
-# file.name = "T1mVsT3mGTBYraster.pdf"
-# rrho2Plot(obj1, obj2, dir.text,plot.title,file.name,
-#           outDir,raster = T)
-# 
-# file.name = "T1mVsT3mGTBY.png"
-# rrho2Plot(obj1, obj2, dir.text,plot.title,file.name,
-#           outDir,raster = F)
+
 
 # 1v3m in ASO by tissue ---------------
 

@@ -15,7 +15,7 @@ setwd(dirname(rstudioapi::callFun("getActiveDocumentContext")$path))
 outdir="CSstr"
 dir.create(outdir)
 
-load("str/processed_data/inputData.rda")
+load("Striatum/processed_data/inputData.rda")
 
 #params------
 maxPout=1

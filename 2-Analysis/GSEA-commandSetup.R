@@ -1,8 +1,11 @@
 
+# this creates scripts that can be run as jobs on a computing cluster
+
 library(Biobase)
 library(biomaRt)
 
-load("../WGCNA/cons/inputData.rda")
+setwd(dirname(rstudioapi::callFun("getActiveDocumentContext")$path))
+load("WGCNA/cons/inputData.rda")
 dc.expr<-t(scale(multiExpr$dc$data))
 str.expr<-t(scale(multiExpr$str$data))
 
@@ -19,8 +22,6 @@ metadata<-rbind(metadata.dc,metadata.str)
 gt<-ifelse(metadata$GT=="Hem","A","W")
 tissue<-ifelse(metadata$tissue=="dc","C","S")
 grp<-paste(gt,metadata$Time,tissue,sep = "")
-# rownames(metadata)
-# colnames(datexpr)
 
 
 sink(file = file.path("grp.cls"))
@@ -46,6 +47,7 @@ isambig<-annot$Gene.stable.ID%in%ambigIDs|annot$HGNC.symbol%in%ambigSymbs
 ambig<-annot[isambig,]
 ambig$isDupSymb<-ifelse(ambig$HGNC.symbol%in%ambigSymbs,"dup","")
 write.csv(ambig[order(ambig$Gene.stable.ID),],row.names = F,"amigIDsAndSymbs.csv")
+# requires some manual disambiguation
 ambig<-read.csv("amigIDsAndSymbs.csv")
 
 annot1<-annot[!isambig,]
@@ -57,6 +59,7 @@ datexpr2<-datexpr[inannotNew,]
 dim(datexpr2)
 rownames(annotNew)<-annotNew$Gene.stable.ID
 annotNew2<-annotNew[rownames(datexpr2),]
+
 library(WGCNA)
 Col.datexpr2<-collapseRows(datexpr2,
                            rowGroup = annotNew$HGNC.symbol,
