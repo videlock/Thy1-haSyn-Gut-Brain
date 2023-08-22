@@ -71,3 +71,40 @@ Code to accompany "Distinct patterns of gene expression changes in the colon and
 6.  Validation
 
 7.  FinalProcessedData is a list containng processed corrected data and metadata
+
+Interactive WGCNA networks are available on NDEx Bio:
+
+Full networks (All genes with module membership at least 0.6).
+
+-   Colon: <https://doi.org/10.18119/N9D31X>
+
+-   Striatum: <https://doi.org/10.18119/N93K77>
+
+Networks of selected genes in selected notable modules:
+
+-   Gut modules:
+
+    -   Gut-Proliferation (cyan) module: <https://doi.org/10.18119/N98C9G>
+
+    -   Gut-Proteolysis (darkmagenta) module: <https://doi.org/10.18119/N94K65>
+
+    -   Gut-Metabolism (blue) module: <https://doi.org/10.18119/N90W48>
+
+    -   Gut-ENS (yellow) module: <https://doi.org/10.18119/N9RC9T>
+
+    -   Gut-Lysosome (greenyellow) module: <https://doi.org/10.18119/N9MK7W>
+
+    -   Gut-Mito-QC (violet) module: <https://doi.org/10.18119/N97C8S>
+
+-   Brain modules:
+
+    -   Brain-Snca (cyan) module: <https://doi.org/10.18119/N9GW37>
+    -   Brain-UPR (red) module: <https://doi.org/10.18119/N9C320>
+
+Consensus networks
+
+-   Colon adjacency: <https://doi.org/10.18119/N9V60M>
+
+-   Striatum adjacency: <https://doi.org/10.18119/N9ZW3K>
+
+-   Midnight blue module (colon adjacency): <https://doi.org/10.18119/N9W318>

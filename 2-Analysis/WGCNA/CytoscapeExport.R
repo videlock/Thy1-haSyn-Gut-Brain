@@ -30,7 +30,7 @@ adjacency = adjacency(datExpr, power = sp, type = "signed",
                       corFnc="bicor",corOptions = list(maxPOutliers =maxPout/100))
 TOM = TOMsimilarity(adjacency);
 
-gi<-readRDS("str/geneINFO_MM6.rds")
+gi<-readRDS("Striatum/geneINFO_MM6.rds")
 gi<-gi[!is.na(gi$EntrezID),]
 gi$color<-col2hex(gi$moduleColor)
 
@@ -64,7 +64,7 @@ write.table(as.data.frame(an$Gene.name),file.path(outdir,"background.txt"),row.n
 outdir="CSdc"
 dir.create(outdir)
 
-load("dc/processed_data/inputData.rda")
+load("Colom/processed_data/inputData.rda")
 
 #params------
 maxPout=5
@@ -77,7 +77,7 @@ dthresh<-0.25
 adjacency = adjacency(datExpr, power = sp, type = "signed",
                       corFnc="bicor",corOptions = list(maxPOutliers =maxPout/100))
 
-gi<-readRDS("dc/geneINFO_MM6.rds")
+gi<-readRDS("Colon/geneINFO_MM6.rds")
 gi<-gi[!is.na(gi$EntrezID),]
 gi$color<-col2hex(gi$moduleColor)
 
@@ -120,7 +120,7 @@ write.table(as.data.frame(an$Gene.name),file.path(outdir,"background.txt"),row.n
 outdir="CScons"
 dir.create(outdir)
 
-load("cons/inputData.rda")
+load("Consensus/inputData.rda")
 
 write.table(as.data.frame(an$Gene.name),file.path(outdir,"background.txt"),row.names = F,quote = F,col.names = F)
 
@@ -131,7 +131,7 @@ adjacency.str = adjacency(multiExpr$str$data, power = 12, type = "signed",
                           corFnc="bicor",corOptions = list(maxPOutliers =0.01))
 
 
-gi<-readRDS("cons/geneINFOallgenes.rds")
+gi<-readRDS("Consensus/geneINFOallgenes.rds")
 
 gi$color<-col2hex(gi$moduleColor)
 
