@@ -1,6 +1,6 @@
 # Thy1-haSyn-Gut-Brain
 
-Code to accompany "Distinct patterns of gene expression changes in the colon and striatum of young mice overexpressing alpha-synuclein support Parkinson Disease as a multi-system process"
+Code to accompany "Distinct patterns of gene expression changes in the colon and striatum of young mice overexpressing alpha-synuclein support Parkinson Disease as a multi-system process", Journal of Parkinson's Disease
 
 -   RNA-seq processing follows recommendations from Lexogen for QuantSeq
 -   Correction for sequencing artifacts and WGCNA code is heavily adapted from code published by the laboratory of Dan Geschwind, much of which can be found at [Geschwind Lab (github.com)](https://github.com/dhglab)
