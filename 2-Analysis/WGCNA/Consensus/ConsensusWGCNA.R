@@ -432,9 +432,7 @@ modtab<-cbind(modtablist[[1]][,c(1,2,3,4)],
                 modtablist[[1]][,c(7,8)],
                 modtablist[[2]][,c(7,8)],
                 modtablist[[1]][,c(9,10)],
-                modtablist[[2]][,c(9,10)],
-                modtablist[[1]][,c(11,12)],
-                modtablist[[2]][,c(11,12)])
+                modtablist[[2]][,c(9,10)])
 
 
 saveRDS(modtab,file = "modtab.rds")

@@ -1,6 +1,9 @@
+
+setwd(dirname(rstudioapi::callFun("getActiveDocumentContext")$path))
+
 library(tidyverse)
 gi.dc <-
-  readRDS("../WGCNA/dc/geneINFOall.rds")
+  readRDS("../WGCNA/Colon/geneINFOall.rds")
 
 
 gries<-read.csv("griesprot.csv")

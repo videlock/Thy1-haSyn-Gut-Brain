@@ -70,9 +70,12 @@ Code to accompany "Distinct patterns of gene expression changes in the colon and
 
 6.  Validation
 
-7.  FinalProcessedData is a list containng processed corrected data and metadata
+    -   nCounter - [Nanstring.R](2-Analysis/Nanostring.R)
+    -   Comparison with Gries et al - [matchGries.R](2-Analysis/matchGries.R)
 
-Interactive WGCNA networks are available on NDEx Bio:
+7.  FinalProcessedData is a list containing processed corrected data and metadata
+
+### Interactive WGCNA networks are available on NDEx Bio:
 
 Full networks (All genes with module membership at least 0.6).
 
@@ -108,3 +111,7 @@ Consensus networks
 -   Striatum adjacency: <https://doi.org/10.18119/N9ZW3K>
 
 -   Midnight blue module (colon adjacency): <https://doi.org/10.18119/N9W318>
+
+### Respirometry
+
+Analysis of respirometry data is included as a vignette in [videlock/SeahorseR (github.com)](https://github.com/videlock/SeahorseR)

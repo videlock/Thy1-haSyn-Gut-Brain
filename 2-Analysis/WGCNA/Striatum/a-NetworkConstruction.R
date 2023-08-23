@@ -7,7 +7,7 @@ allowWGCNAThreads()
 library(flashClust);
 library(gplots)
 library(RColorBrewer)
-
+set.seed(12345)
 setwd(dirname(rstudioapi::callFun("getActiveDocumentContext")$path))
 
 # use data from prior step or start from load data below
@@ -260,8 +260,8 @@ MEs0 = moduleEigengenes(datExpr, moduleColors,excludeGrey = F)$eigengenes
 MEs = orderMEs(MEs0)
 rownames(MEs) = rownames(datExpr)
 names(moduleColors) <- colnames(datExpr)
-save(geneTree,moduleColors,MEs,sp,mms,ch,dthresh,maxPout,
-     sd,datTraitCols,metaData,datExpr,an,file="modules.rda")
+# save(geneTree,moduleColors,MEs,sp,mms,ch,dthresh,maxPout,
+#      sd,datTraitCols,metaData,datExpr,an,file="modules.rda")
      
 # to have modules match paper modules, run the following
 paperColors<-c( 'royalblue', 'lightcyan', 'darkgrey', 'pink', 'tan', 'skyblue', 'steelblue', 'lightgreen', 'green', 'saddlebrown', 'black', 'cyan', 'brown', 'darkturquoise', 'white', 'orange', 'yellow', 'darkred', 'darkorange', 'red', 'magenta', 'turquoise', 'grey60', 'purple', 'midnightblue', 'blue', 'darkgreen', 'salmon', 'lightyellow', 'grey' )
@@ -283,7 +283,13 @@ names(moduleColors) <- colnames(datExpr)
 
 mColorh <- cbind(moduleColors,t(geneSigsColor))
 mLabelh <- c("Merged Colors",rownames(geneSigsColor))
-save(geneTree,moduleColors,MEs,sp,mms,ch,dthresh,maxPout,
+
+MEs0g = moduleEigengenes(datExpr, moduleColors,excludeGrey = F)$eigengenes
+MEs.g = orderMEs(MEs0g)
+rownames(MEs.g) = rownames(datExpr)
+
+
+save(geneTree,moduleColors,MEs,MEs.g,sp,mms,ch,dthresh,maxPout,
      sd,datTraitCols,metaData,datExpr,an,file="modules.rda")
 
 
@@ -298,5 +304,4 @@ pdf(file = "Signed_Dendro_params_Final.pdf",height=5,width=10
                       autoColorHeight = F,
                       colorHeight = .3,marAll = mar.net,
 );mtext(side=1, line=3,  adj=0.5, cex=1, sub);dev.off()
-
 

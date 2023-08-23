@@ -1,5 +1,5 @@
 rm(list = ls())
-
+set.seed(12345)
 library(Biobase)
 options(stringsAsFactors = FALSE);
 library(WGCNA);
@@ -108,6 +108,7 @@ save(datExpr, metaData, datTraits,an, file=file.path("processed_data","inputData
 
 
 # soft power thresholding-------
+load("processed_data/inputData.rda")
 maxPout=5
 
 powers = c(c(1:10), seq(from = 12, to=20, by=2))
@@ -267,25 +268,41 @@ MEs0 = moduleEigengenes(datExpr, moduleColors,excludeGrey = F)$eigengenes
 MEs = orderMEs(MEs0)
 rownames(MEs) = rownames(datExpr)
 names(moduleColors) <- colnames(datExpr)
-save(geneTree,moduleColors,MEs,sp,mms,ch,dthresh,maxPout,
-     sd,datTraitCols,metaData,datExpr,an,file="modules.rda")
+# save(geneTree,moduleColors,MEs,sp,mms,ch,dthresh,maxPout,
+#      sd,datTraitCols,metaData,datExpr,an,file="modules.rda")
+
+names(MEs)%in%"grey" #no grey
 
 # to have modules match paper modules, run the following
-paperColors<-c('darkred', 'violet', 'blue', 'brown', 'lightgreen', 'grey60', 'saddlebrown', 'red', 'lightcyan', 'purple', 'salmon', 'orange', 'sienna3', 'lightyellow', 'yellowgreen', 'tan', 'white', 'black', 'darkorange', 'greenyellow', 'royalblue', 'darkmagenta', 'skyblue', 'darkolivegreen', 'magenta', 'steelblue', 'midnightblue', 'paleturquoise', 'yellow', 'darkturquoise', 'turquoise', 'green', 'cyan', 'darkgreen', 'darkgrey', 'pink')
-mods<-substring(colnames(MEs),3)
+paperColors<-c( 'turquoise', 'blue','brown', 'yellow',
+                'green', 'red', 'black', 'pink', 'magenta',
+                'purple', 'greenyellow','tan', 'salmon',
+                'cyan', 'midnightblue', 'lightcyan',  'grey60',
+                'lightgreen', 'lightyellow', 'royalblue', 'darkred',
+                'darkgreen',  'darkturquoise', 'darkgrey', 'orange',
+                'darkorange','white', 'skyblue','saddlebrown',
+                'steelblue','paleturquoise', 'violet', 'darkolivegreen',
+                'darkmagenta', 'sienna3','yellowgreen')
+          
+# mods<-substring(colnames(MEs),3)
 
-modConvert<-data.frame(old=mods,new=paperColors)
+
+mods.alpha<-substring(colnames(MEs0),3)
+modConvert<-data.frame(old=mods.alpha,new=paperColors)
 moduleColors.new<-character(length = length(moduleColors))
+
 
 for(i in 1:nrow(modConvert)){
   moduleColors.new[moduleColors==modConvert$old[i]]<-modConvert$new[i]
 }
 
-MEs0 = moduleEigengenes(datExpr, moduleColors.new,excludeGrey = F)$eigengenes
+moduleColors <- moduleColors.new
+
+MEs0 = moduleEigengenes(datExpr, moduleColors,excludeGrey = F)$eigengenes
 MEs = orderMEs(MEs0)
 rownames(MEs) = rownames(datExpr)
-moduleColors <- moduleColors.new
 names(moduleColors) <- colnames(datExpr)
+
 
 mColorh <- cbind(moduleColors,t(geneSigsColor))
 mLabelh <- c("Merged Colors",rownames(geneSigsColor))

@@ -63,7 +63,7 @@ for(i in 1:nrow(str.uv.tab)){
 }
 
 supMatTabs<-list(dfs=list(uv.str=str.uv.tab),
-                 titles=list(uv.str="Striatum univariate predictors of ASO status"))
+                 titles=list(uv.str="Striatum univariate predictors of Thy1-haSyn status"))
 
 cor1 = cor(str.dat[,uvmods.str])
 corrplot.mixed(cor1, lower.col = "black", number.cex = .7,
@@ -164,17 +164,17 @@ for(i in 1:nrow(dc.uv.tab)){
 
 
 supMatTabs$dfs$uv.dc<-dc.uv.tab
-supMatTabs$titles$uv.dc<-"Colon univariate predictors of ASO status"
+supMatTabs$titles$uv.dc<-"Colon univariate predictors of Thy1-haSyn status"
 
 supMatTabs$dfs$uv.dc1m<-data.frame(Predictors=gsub("dc\\.","",rownames(univ.fit[uvmods.dc1m,])),
                                    Estimates=univ.fit[uvmods.dc1m,"aso1mEst"],
                                    p=univ.fit[uvmods.dc1m,"aso1mP"],row.names = uvmods.dc1m)
-supMatTabs$titles$uv.dc1m<-"Colon univariate predictors of ASO status (one month)"
+supMatTabs$titles$uv.dc1m<-"Colon univariate predictors of Thy1-haSyn status (one month)"
 
 supMatTabs$dfs$uv.dc3m<-data.frame(Predictors=gsub("dc\\.","",rownames(univ.fit[uvmods.dc3m,])),
                                    Estimates=univ.fit[uvmods.dc3m,"aso3mEst"],
                                    p=univ.fit[uvmods.dc3m,"aso3mP"],row.names = uvmods.dc3m)
-supMatTabs$titles$uv.dc3m<-"Colon univariate predictors of ASO status (three months)"
+supMatTabs$titles$uv.dc3m<-"Colon univariate predictors of Thy1-haSyn status (three months)"
 
 
 uvmods.dc.2<-uvmods.dc[!uvmods.dc%in%c("dc.darkgrey","dc.cyan")]
@@ -286,7 +286,7 @@ for(i in 1:nrow(uv.str.bg)){
 
 
 supMatTabs$dfs$uv.str.bg<-uv.str.bg
-supMatTabs$titles$uv.str.bg<-"Striatum (matched samples) univariate predictors of ASO status"
+supMatTabs$titles$uv.str.bg<-"Striatum (matched samples) univariate predictors of Thy1-haSyn status"
 
 if(length(uvmods.str.bg[uvmods.str.bg%in%agemods])>0){
   fit.mv.bg<-eval(parse(
@@ -381,17 +381,17 @@ for(i in 1:nrow(uv.dc.bg)){
 }
 
 supMatTabs$dfs$uv.dc.bg<-uv.dc.bg
-supMatTabs$titles$uv.dc.bg<-"Colon (matched samples) univariate predictors of ASO status"
+supMatTabs$titles$uv.dc.bg<-"Colon (matched samples) univariate predictors of Thy1-haSyn status"
 
 supMatTabs$dfs$uv.dc1m.bg<-data.frame(Predictors=gsub("dc\\.","",rownames(univ.fit.bg[uvmods.dc1m.bg,])),
                                       Estimates=univ.fit.bg[uvmods.dc1m.bg,"aso1mEst"],
                                       p=univ.fit.bg[uvmods.dc1m.bg,"aso1mP"],row.names = uvmods.dc1m.bg)
-supMatTabs$titles$uv.dc1m.bg<-"Colon (matched samples) univariate predictors of ASO status (one month)"
+supMatTabs$titles$uv.dc1m.bg<-"Colon (matched samples) univariate predictors of Thy1-haSyn status (one month)"
 
 supMatTabs$dfs$uv.dc3m.bg<-data.frame(Predictors=gsub("dc\\.","",rownames(univ.fit.bg[uvmods.dc3m.bg,])),
                                       Estimates=univ.fit.bg[uvmods.dc3m.bg,"aso3mEst"],
                                       p=univ.fit.bg[uvmods.dc3m.bg,"aso3mP"],row.names = uvmods.dc3m.bg)
-supMatTabs$titles$uv.dc3m.bg<-"Colon (matched samples) univariate predictors of ASO status (three months)"
+supMatTabs$titles$uv.dc3m.bg<-"Colon (matched samples) univariate predictors of Thy1-haSyn status (three months)"
 
 uvmods.dc1m.bg.2<-uvmods.dc1m.bg[!uvmods.dc1m.bg%in%c("dc.cyan")]
 
@@ -446,7 +446,7 @@ mvmods.dc3m.bg<-mvmods.dc3m.bg[!mvmods.dc3m.bg%in%"(Intercept)"]
 
 
 supMatTabs$titles$mv.str.bg<-paste0(
-  "Striatum (matched samples) predictors of ASO (F = ",
+  "Striatum (matched samples) predictors of Thy1-haSyn (F = ",
   format(glance(mvfit.str.bg)$statistic,digits = 2),
   ", p = ",
   format(glance(mvfit.str.bg)$p.value,digits = 2),
@@ -459,7 +459,7 @@ supMatTabs$dfs$mv.str.bg<-smdf
 
 
 supMatTabs$titles$mv.dc1m.bg<-paste0(
-  "Colon (one month, matched samples) predictors of ASO (F = ",
+  "Colon (one month, matched samples) predictors of Thy1-haSyn (F = ",
   format(glance(mvfit.dc1m.bg)$statistic,digits = 2),
   ", p = ",
   format(glance(mvfit.dc1m.bg)$p.value,digits = 2),
@@ -471,7 +471,7 @@ supMatTabs$dfs$mv.dc1m.bg<-smdf
 
 
 supMatTabs$titles$mv.dc3m.bg<-paste0(
-  "Colon (three months, matched samples) predictors of ASO (F = ",
+  "Colon (three months, matched samples) predictors of Thy1-haSyn (F = ",
   format(glance(mvfit.dc3m.bg)$statistic,digits = 2),
   ", p = ",
   format(glance(mvfit.dc3m.bg)$p.value,digits = 2),
@@ -545,6 +545,7 @@ bgfit.comb<-stepAIC(bgfit.comb,direction = "backward",trace = FALSE)
 summary(bgfit.comb)
 
 
+
 bgfit.dc<-lm(ASO~dc.yellow + Age + dc.yellow:Age, data = bg.dat)
 summary(bgfit.dc)
 
@@ -578,9 +579,7 @@ save(bgfit.comb,bgfit.dc,bgfit.str,
      bgfit.dc1m,bgfit.str1m,bgfit1m.comb,
      mvfit.dc, mvfit.dc1m, mvfit.dc3m,
      mvfit.str, 
-     mvfit.dc.labels ,mvfit.dc.title,
-     mvfit.dc1m.labels, mvfit.dc1m.title,
-     mvfit.dc3m.labels, mvfit.dc3m.title, supMatTabs,
+     supMatTabs,
      file = "regResults.rda")
 
 saveRDS(supMatTabs,file = "SupMatRegTabs.rds")
