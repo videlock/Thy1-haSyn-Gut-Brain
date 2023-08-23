@@ -1,4 +1,4 @@
-
+rm(list = ls())
 options(stringsAsFactors = FALSE);
 library(WGCNA);
 allowWGCNAThreads()
@@ -13,21 +13,21 @@ setwd(dirname(rstudioapi::callFun("getActiveDocumentContext")$path))
 
 
 # setup-----------
-load("../dc/modules.rda")
-load("../dc/processed_data/inputData.rda")
+load("../Colon/modules.rda")
+load("../Colon/processed_data/inputData.rda")
 names(MEs)<-gsub("ME","dc.",names(MEs))
 dc.MEs<-MEs
 dc.dat<-cbind(metaData[,c(3:4,14:18)],dc.MEs)
-dc.dat$Genotype<-ifelse(dc.dat$GT=="Hem","ASO","WT")
+dc.dat$Genotype<-ifelse(dc.dat$GT=="Hem","Thy1-haSyn","WT")
 dc.dat$Timepoint<-ifelse(dc.dat$Time==1,"1 month","3 months")
 
-load("../str/modules.rda")
-load("../str/processed_data/inputData.rda")
+load("../Striatum/modules.rda")
+load("../Striatum/processed_data/inputData.rda")
 
 names(MEs)<-gsub("ME","str.",names(MEs))
 str.MEs<-MEs
-str.dat<-cbind(metaData[,c(3:4,14:18)],MEs)
-str.dat$Genotype<-ifelse(str.dat$GT=="Hem","ASO","WT")
+str.dat<-cbind(metaData[,c(3:4,13:17)],MEs)
+str.dat$Genotype<-ifelse(str.dat$GT=="Hem","Thy1-haSyn","WT")
 str.dat$Timepoint<-ifelse(str.dat$Time==1,"1 month","3 months")
 
 

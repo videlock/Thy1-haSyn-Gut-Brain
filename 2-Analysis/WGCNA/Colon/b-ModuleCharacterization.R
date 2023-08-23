@@ -151,7 +151,6 @@ geneInfo<-makeGeneInfo(an[colnames(datExpr),],moduleColors,geneModuleMembership)
 
 
 saveRDS(geneInfo,file = "geneINFOall.rds")
-geneInfoNoGrey<-geneInfo[!geneInfo$moduleColor%in%"grey",] # no grey module
 
 saveRDS(geneInfo[geneInfo$MM>=0.6,],file = "geneINFO_MM6.rds")
 

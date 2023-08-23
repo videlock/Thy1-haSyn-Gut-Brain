@@ -122,8 +122,15 @@ modtab<-cbind(modsizes,cortab)
 saveRDS(modtab,file = "modtab.rds")
 # write.csv(modtab,"modtab.csv",row.names = F)
 
+# grey modtab
+mods.g<-substring(colnames(MEs.g),3)
+modsizes.g<-as.data.frame(table(factor(moduleColors, levels = mods.g)))
+names(modsizes.g)<-c("moduleColor","Size")
+rownames(modsizes.g)<-colnames(MEs.g)
+saveRDS(modsizes.g,file = "modtab-g.rds")
+
 rm(MEDiss,METree,moduleTraitCor,moduleTraitPvalue,
-   moduleTraitPvalueBH,textMatrixBH,modsizes,cortab)
+   moduleTraitPvalueBH,textMatrixBH,modsizes,cortab,modsizes.g)
 
 # geneinfo------
 
@@ -147,17 +154,20 @@ makeGeneInfo<-function(geneData,modules,geneModMemb){
 }
 
 
-geneModuleMembership = as.data.frame(cor(datExpr, MEs, use = "p"))
-names(geneModuleMembership) = substring(names(MEs),3)
+geneModuleMembership = as.data.frame(cor(datExpr, MEs.g, use = "p"))
+names(geneModuleMembership) = substring(names(MEs.g),3)
 geneInfo<-makeGeneInfo(an[colnames(datExpr),],moduleColors,geneModuleMembership)
 
 
+saveRDS(geneInfo,file = "geneINFOallwithGrey.rds")
+notgrey<-!geneInfo$moduleColor=="grey"
+geneInfo<-geneInfo[notgrey,]
 saveRDS(geneInfo,file = "geneINFOall.rds")
-geneInfoNoGrey<-geneInfo[!geneInfo$moduleColor%in%"grey",] # no grey module
 
 saveRDS(geneInfo[geneInfo$MM>=0.6,],file = "geneINFO_MM6.rds")
 
-# write.csv(geneInfo[geneInfo$MM>=0.6,],"geneINFO.csv")
+write.csv(geneInfo[geneInfo$MM>=0.6,],"geneINFO.csv")
+
 
 # GO ---
 
