@@ -21,26 +21,27 @@ Code to accompany "Distinct patterns of gene expression changes in the colon and
 #### A. Trim FASTQs
 
 1.  bbduk - [A1_bbdukQS.sh](1-RNAseqWorkflow/A_TrimFastqs/A1_bbdukQS.sh)
-2.  FastQC - [A2_runFastQC.sh](1-RNAseqWorkflow/A_TrimFastqs/A2_runFastQC.sh)
+2.  FastQC - [A2_runFastQC.sh](1-RNAseqWorkflow/A_TrimFastqs/A2runFastQC.sh)
 
 #### B. Align reads with STAR and run Picard tools
 
 1.  generate index - [B1_genomeGenMM22](1-RNAseqWorkflow/B_STARandPicard/B1_genomeGenMM22.sh)
 2.  align - [B2_runStar.sh](1-RNAseqWorkflow/B_STARandPicard/B2_runStar.sh)
 3.  samtools - [B3_samtoolsAndCountTable.sh](1-RNAseqWorkflow/B_STARandPicard/B3_samtoolsAndCountTable.sh)
-4.  count table - [makeCountTable.R](1-RNAseqWorkflow/B_STARandPicard/makeCountTable.R)
-5.  Picard tools - [B4_runPicard.sh](1-RNAseqWorkflow/B_STARandPicard/B4_runPicard.sh)
-6.  Picard table - [B5_makePicardTable.R](1-RNAseqWorkflow/B_STARandPicard/B5_makePicardTable.R)
+4.  Picard tools - [B4_runPicard.sh](1-RNAseqWorkflow/B_STARandPicard/B4_runPicard.sh)
+5.  Picard table - [B5_makePicardTable.R](1-RNAseqWorkflow/B_STARandPicard/B5_makePicardTable.R)
+6.  Count table - [makeCountTable.R](1-RNAseqWorkflow/B_STARandPicard/B6_makeCountTable.R)
+
 
 ### C. QC and Normalization
 
-1.  outlier detection - [outlierDetection.R](1-RNAseqWorkflow/C_QCandNormalization/outlierDetection.R)
-2.  colon, both 1 and 3 months - [dc_1and3m.R](1-RNAseqWorkflow/C_QCandNormalization/dc_1and3m.R)
-3.  colon, 1 month - [dc_1m.R](1-RNAseqWorkflow/C_QCandNormalization/dc_1m.R)
-4.  colon, 3 months - [dc_3m.R](1-RNAseqWorkflow/C_QCandNormalization/dc_3m.R)
-5.  striatum, both 1 and 3 months - [str_1and3m.R](1-RNAseqWorkflow/C_QCandNormalization/str_1and3m.R)
-6.  striatum, 1 month - [str_1m.R](1-RNAseqWorkflow/C_QCandNormalization/str_1m.R)
-7.  striatum, 3 months - [str_3m.R](1-RNAseqWorkflow/C_QCandNormalization/str_3m.R)
+1.  outlier detection - [QCfunctions.R](1-RNAseqWorkflow/C_QCandNormalization/QCfunctions.R) is sourced for the subsequent steps
+2.  colon, both 1 and 3 months - [dcAll.R](1-RNAseqWorkflow/C_QCandNormalization/dcAll.R)
+3.  colon, 1 month - [dc1m.R](1-RNAseqWorkflow/C_QCandNormalization/dc1m.R)
+4.  colon, 3 months - [dc3m.R](1-RNAseqWorkflow/C_QCandNormalization/dc3m.R)
+5.  striatum, both 1 and 3 months - [strAll.R](1-RNAseqWorkflow/C_QCandNormalization/strAll.R)
+6.  striatum, 1 month - [str1m.R](1-RNAseqWorkflow/C_QCandNormalization/str1m.R)
+7.  striatum, 3 months - [str3m.R](1-RNAseqWorkflow/C_QCandNormalization/str3m.R)
 
 ### 2. Analysis
 
