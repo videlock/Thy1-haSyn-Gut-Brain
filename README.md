@@ -12,6 +12,54 @@ Code to accompany "Distinct patterns of gene expression changes in the colon and
 -   str striatum
 -   cons consensus
 
+## Data
+
+Processed gene expression data is distributed as R `ExpressionSet` objects (`.rds` files). For each tissue × timepoint grouping, three objects are produced by the scripts in [`1-RNAseqWorkflow/C_QCandNormalization/`](1-RNAseqWorkflow/C_QCandNormalization) and committed to that grouping's `data/` folder (see the [datasets table](#datasets-available) below for direct links). They share the same samples and gene set but differ in how much processing has been applied.
+
+| File | Description | When to use |
+|---|---|---|
+| `filteredEset.rds` | Raw counts, restricted to genes with **>5 counts in at least 30% of samples**. No normalization, no batch/technical correction. | **This is what to use if you want "raw counts."** It is the count matrix the rest of the pipeline starts from. We do not redistribute the unfiltered counts because low-expression genes are uninformative for QuantSeq and inflate multiple-testing burden in any downstream analysis. |
+| `filtNormEset.rds` | `filteredEset` after DESeq2 variance-stabilizing transformation (`estimateSizeFactors` → `estimateDispersions` → `getVarianceStabilizedData`). No technical-covariate regression. | Intermediate object, exposed mainly for reproducibility. Most users should prefer `CorrectedEset.rds` below. |
+| `CorrectedEset.rds` | `filtNormEset` after regressing out sequencing-artifact principal components derived from the Picard QC metrics. | **Recommended for downstream analysis.** A substantial amount of technical variance was removed at this step (see the per-dataset script for the specific PCs regressed, e.g. seqPCs 1, 2, 3, and 7 for `dc1m`). Differential expression, WGCNA, heatmaps, and all figures in the paper use this object. |
+
+The PCs chosen for regression were selected per dataset by inspecting the association of each sequencing PC with biological covariates of interest versus its association with technical Picard metrics; PCs dominated by technical signal were removed. The selection is hard-coded in each tissue/timepoint script.
+
+### Datasets available
+
+The same three-object pattern is produced for each of the six tissue × timepoint groupings. Each row's **Data folder** link opens the directory containing that grouping's `filteredEset.rds`, `filtNormEset.rds`, and `CorrectedEset.rds`.
+
+| Group | Tissue | Timepoint(s) | Script | Data folder |
+|---|---|---|---|---|
+| `dcAll` | distal colon | 1 mo + 3 mo | [dcAll.R](1-RNAseqWorkflow/C_QCandNormalization/dcAll.R) | [`dc/data/`](1-RNAseqWorkflow/C_QCandNormalization/dc/data) |
+| `dc1m`  | distal colon | 1 mo         | [dc1m.R](1-RNAseqWorkflow/C_QCandNormalization/dc1m.R)   | [`dc1m/data/`](1-RNAseqWorkflow/C_QCandNormalization/dc1m/data) |
+| `dc3m`  | distal colon | 3 mo         | [dc3m.R](1-RNAseqWorkflow/C_QCandNormalization/dc3m.R)   | [`dc3m/data/`](1-RNAseqWorkflow/C_QCandNormalization/dc3m/data) |
+| `strAll`| striatum     | 1 mo + 3 mo | [strAll.R](1-RNAseqWorkflow/C_QCandNormalization/strAll.R) | [`str/data/`](1-RNAseqWorkflow/C_QCandNormalization/str/data) |
+| `str1m` | striatum     | 1 mo         | [str1m.R](1-RNAseqWorkflow/C_QCandNormalization/str1m.R)  | [`str1m/data/`](1-RNAseqWorkflow/C_QCandNormalization/str1m/data) |
+| `str3m` | striatum     | 3 mo         | [str3m.R](1-RNAseqWorkflow/C_QCandNormalization/str3m.R)  | [`str3m/data/`](1-RNAseqWorkflow/C_QCandNormalization/str3m/data) |
+
+> Note: the `dcAll` and `strAll` scripts write to folders named `dc/` and `str/` (not `dcAll/` and `strAll/`) — the links above already point to the right place.
+
+> **If you are looking for data:** for "raw counts," use `filteredEset.rds`. For *any* downstream analysis (differential expression, WGCNA, clustering, visualization, machine learning), please use `CorrectedEset.rds` instead — the uncorrected versions retain a meaningful amount of sequencing-batch signal that will leak into your results.
+
+### Working with `ExpressionSet` objects
+
+These files are R `ExpressionSet` objects from Bioconductor's [Biobase](https://bioconductor.org/packages/release/bioc/html/Biobase.html) package. To load one and pull out the expression matrix, sample metadata, or feature annotation:
+
+```r
+# install.packages("BiocManager"); BiocManager::install("Biobase")
+library(Biobase)
+
+eset <- readRDS("CorrectedEset.rds")
+
+exprs(eset)     # gene × sample expression matrix
+pData(eset)     # sample metadata (phenoData) as a data.frame
+fData(eset)     # gene/feature annotation (featureData) as a data.frame
+sampleNames(eset)
+featureNames(eset)
+```
+
+For a full walk-through of the class and its accessors, see the Bioconductor vignette **["An Introduction to Bioconductor's ExpressionSet Class"](https://bioconductor.org/packages/release/bioc/vignettes/Biobase/inst/doc/ExpressionSetIntroduction.pdf)** (PDF) and the [Biobase reference manual](https://bioconductor.org/packages/release/bioc/manuals/Biobase/man/Biobase.pdf).
+
 ## Contents
 
 *Code executed in the following order*
